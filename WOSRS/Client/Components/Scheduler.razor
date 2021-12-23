@@ -1,0 +1,11 @@
+﻿<div>
+    @foreach (var i in ScheduledItems)
+    {
+        <ScheduledItemComponent ScheduledItem="i" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<ScheduledItemContainer> ScheduledItems { get; set; }
+}

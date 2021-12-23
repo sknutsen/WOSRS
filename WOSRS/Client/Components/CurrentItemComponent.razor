@@ -1,0 +1,46 @@
+﻿@inject HttpClient Http
+
+<h5>@Item?.Item?.ItemName</h5>
+
+<p>Created: @Item?.Date.ToDateText()</p>
+
+@if (Item.IsComplete)
+{
+    <p>Item is complete 🥳</p>
+}
+else
+{
+    <p><button class="btn btn-primary" @onclick="Click">Complete</button></p>
+}
+
+@if (Item.Item?.ItemCategories != null && Item.Item?.ItemCategories.Count > 0)
+{
+    <h6>Categories</h6>
+    <div>
+        @foreach (var c in Item.Item?.ItemCategories)
+        {
+            <CategoryStaticComponent Category="new CategoryContainer(c.Category)" />
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public ScheduledItemContainer Item { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> Click { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Item != null)
+        {
+            var response = await Http.PostAsJsonAsync<ItemContainer>("Items/get", new ItemContainer { ItemId = Item.ItemId });
+
+            var content = await response.Content.ReadFromJsonAsync<ItemContainer>();
+
+            Item.Item = (Item)content.ToEntityClass();
+        }
+    }
+
+}

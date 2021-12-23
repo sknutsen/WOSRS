@@ -1,0 +1,4 @@
+.vs/
+bin/
+obj/
+WOSRS/Server/appsettings.Development.json

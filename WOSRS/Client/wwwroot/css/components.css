@@ -1,0 +1,66 @@
+﻿.container-component {
+    display: inline-flex;
+    border: solid thin black;
+    border-radius: 4px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin: 20px;
+    color: white;
+    background-color: var(--info);
+    -moz-box-shadow: 3px 3px 2px grey;
+    -webkit-box-shadow: 3px 3px 2px grey;
+    box-shadow: 3px 3px 2px grey;
+    cursor: pointer;
+    min-width: 150px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+    .container-component:hover {
+        -moz-box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        -webkit-box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+.static-container-component {
+    display: inline-flex;
+    border: solid thin black;
+    border-radius: 4px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 20px;
+    color: white;
+    background-color: var(--info);
+    -moz-box-shadow: 3px 3px 2px grey;
+    -webkit-box-shadow: 3px 3px 2px grey;
+    box-shadow: 3px 3px 2px grey;
+    min-width: 150px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+    .static-container-component:hover {
+        -moz-box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        -webkit-box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+.dismiss-div {
+    display: inline;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: solid thin black;
+    float: right;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+    .dismiss-div:hover {
+        background-image: radial-gradient(var(--secondary), var(--info));
+        background-blend-mode: darken;
+    }
