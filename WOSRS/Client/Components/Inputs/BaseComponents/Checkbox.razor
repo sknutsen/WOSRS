@@ -1,5 +1,5 @@
-﻿<label>
-    <input type="checkbox" @bind="Value" />
+﻿<label class="checkbox-label" style="@(IsSelected())">
+    <input type="checkbox" value="@Value" checked="@Value" @onclick="Click" />
     @Text
 </label>
 
@@ -18,5 +18,13 @@
 
     [Parameter]
     public string Text { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> Click { get; set; }
+
+    private string IsSelected()
+    {
+        return Checked ? "background-color: var(--primary); color: white;" : "background-color: white;";
+    }
 
 }

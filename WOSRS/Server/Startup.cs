@@ -27,8 +27,9 @@ namespace WOSRS.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6))));
-            services.AddDbContext<DataDbContext>(options => options.UseNpgsql(Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6))));
+            var envDb = System.Environment.GetEnvironmentVariable("DATABASE");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(envDb ?? Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6))));
+            services.AddDbContext<DataDbContext>(options => options.UseNpgsql(envDb ?? Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6))));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

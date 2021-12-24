@@ -69,7 +69,10 @@ namespace WOSRS.Server.Controllers
 
             var result = await context.ItemCategories.FindAsync(container.ItemCategoryId);
 
-            if (result.Item.UserId != userId || result.Category.UserId != userId)
+            var item = await context.FindAsync<Item>(container.ItemId);
+            var category = await context.FindAsync<Category>(container.ItemId);
+
+            if (item.UserId != userId || category.UserId != userId)
             {
                 logger.LogWarning(LogTexts.DeleteItemCategoryLinkFailed);
 

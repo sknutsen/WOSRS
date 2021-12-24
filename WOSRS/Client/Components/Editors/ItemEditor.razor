@@ -14,11 +14,11 @@
 <div>
     @foreach (var cat in Categories)
     {
-        @*<Checkbox @bind-Checked="SelectedCategories[cat.CategoryId]" Text="@cat.CategoryName" />*@
-        <label>
+        <Checkbox @bind-Checked="SelectedCategories[cat.CategoryId]" Text="@cat.CategoryName" Click="() => ToggleCategory(cat)" />
+        @*<label>
             <input type="checkbox" checked="@SelectedCategories[cat.CategoryId]" @onchange="() => ToggleCategory(cat)" />
             @cat.CategoryName
-        </label>
+        </label>*@
     }
 </div>
 

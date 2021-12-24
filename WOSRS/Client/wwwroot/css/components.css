@@ -55,7 +55,6 @@
     padding-left: 10px;
     padding-right: 10px;
     border-left: solid thin black;
-    float: right;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
 }
