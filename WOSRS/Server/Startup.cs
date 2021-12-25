@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using WOSRS.Server.Data;
 using WOSRS.Server.Models;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace WOSRS.Server
 {
@@ -28,25 +26,71 @@ namespace WOSRS.Server
         public void ConfigureServices(IServiceCollection services)
         {
             var envDb = System.Environment.GetEnvironmentVariable("DATABASE");
-            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(envDb ?? Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6))));
-            services.AddDbContext<DataDbContext>(options => options.UseNpgsql(envDb ?? Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6))));
+            services.AddDbContext<ApplicationDbContext>(options => 
+            { 
+                options.UseNpgsql(Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6)));
+                options.UseOpenIddict();
+            });
 
-            services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddOpenIddict()
+                .AddCore(options =>
+                {
+                    options.UseEntityFrameworkCore().UseDbContext<ApplicationDbContext>();
+                })
+                .AddServer(options =>
+                {
+                    // Enable the authorization, logout, token and userinfo endpoints.
+                    options.SetAuthorizationEndpointUris("/connect/authorize")
+                           .SetLogoutEndpointUris("/connect/logout")
+                           .SetTokenEndpointUris("/connect/token")
+                           .SetUserinfoEndpointUris("/connect/userinfo");
+
+                    // Mark the "email", "profile" and "roles" scopes as supported scopes.
+                    options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
+
+                    // Note: the sample uses the code and refresh token flows but you can enable
+                    // the other flows if you need to support implicit, password or client credentials.
+                    options.AllowAuthorizationCodeFlow()
+                           .AllowRefreshTokenFlow();
+
+                    // Register the signing and encryption credentials.
+                    options.AddDevelopmentEncryptionCertificate()
+                           .AddDevelopmentSigningCertificate();
+
+                    // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
+                    options.UseAspNetCore()
+                           .EnableAuthorizationEndpointPassthrough()
+                           .EnableLogoutEndpointPassthrough()
+                           .EnableStatusCodePagesIntegration()
+                           .EnableTokenEndpointPassthrough();
+                })
+                .AddValidation(options =>
+                {
+                    options.UseLocalServer();
+
+                    options.UseAspNetCore();
+                });
+
+            services.AddDbContext<DataDbContext>(options => options.UseNpgsql(Configuration["TestDb"], o => o.SetPostgresVersion(new System.Version(9, 6))));
+
+            //services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            //services.AddAuthentication()
+            //    .AddIdentityServerJwt();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
 
             services.Configure<IdentityOptions>(options =>
             {
+                options.ClaimsIdentity.UserNameClaimType = Claims.Name;
+                options.ClaimsIdentity.UserIdClaimType = Claims.Subject;
+                options.ClaimsIdentity.RoleClaimType = Claims.Role;
+
                 // Password settings.
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
@@ -65,6 +109,8 @@ namespace WOSRS.Server
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
+
+            services.AddHostedService<Worker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +135,6 @@ namespace WOSRS.Server
 
             app.UseRouting();
 
-            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
 

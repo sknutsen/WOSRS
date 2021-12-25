@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OpenIddict.Validation.AspNetCore;
 using System.Threading.Tasks;
 using WOSRS.Server.Data;
 using WOSRS.Server.Logic;
@@ -10,7 +11,7 @@ using WOSRS.Server.Models;
 
 namespace WOSRS.Server.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     [ApiController]
     public class UsersController : Controller
@@ -30,8 +31,6 @@ namespace WOSRS.Server.Controllers
         public async Task<ActionResult<string>> Get()
         {
             var userId = User.GetUserId();
-
-            logger.LogWarning($"sending userid: {userId}\n\n\n");
 
             return Ok(userId);
         }

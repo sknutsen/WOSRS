@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OpenIddict.Validation.AspNetCore;
 using System.Linq;
 using System.Threading.Tasks;
 using WOSRS.Server.Data;
@@ -12,7 +13,7 @@ using WOSRS.Shared.Models;
 
 namespace WOSRS.Server.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("[controller]")]
     public class SettingsController : Controller
