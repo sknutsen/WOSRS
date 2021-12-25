@@ -35,11 +35,15 @@ namespace WOSRS.Server
                     Type = ClientTypes.Public,
                     PostLogoutRedirectUris =
                     {
-                        new Uri("https://localhost:44371/authentication/logout-callback")
+                        new Uri("https://wosrsserver.azurewebsites.net/authentication/logout-callback"),
+                        new Uri("https://wosrs.zdk.no/authentication/logout-callback"),
+                        new Uri("https://localhost:44371/authentication/logout-callback"),
                     },
                     RedirectUris =
                     {
-                        new Uri("https://localhost:44371/authentication/login-callback")
+                        new Uri("https://wosrsserver.azurewebsites.net/authentication/login-callback"),
+                        new Uri("https://wosrs.zdk.no/authentication/login-callback"),
+                        new Uri("https://localhost:44371/authentication/login-callback"),
                     },
                     Permissions =
                     {

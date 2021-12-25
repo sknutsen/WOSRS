@@ -2,3 +2,7 @@
 bin/
 obj/
 WOSRS/Server/appsettings.Development.json
+*.pubxml
+*.user
+/WOSRS/Server/Properties/ServiceDependencies/WOSRSServer - Web Deploy1/profile.arm.json
+/WOSRS/Server/Properties/ServiceDependencies/WOSRSServer - Web Deploy1/secrets1.arm.json

@@ -1,17 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	<runtimeframeworkname>Microsoft.AspNetCore.App</runtimeframeworkname>
     <StartupObject>WOSRS.Server.Program</StartupObject>
-    <UserSecretsId>9c20b8d5-a374-47b2-9d3a-bc8c9645288a</UserSecretsId>
+    <UserSecretsId>8bf5813d-5a21-4bb6-bc28-caac7a36687f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.0" />
+    <PackageReference Include="Azure.Identity" Version="1.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.2" />
@@ -37,6 +39,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\AuthMigrations\" />
+    <Folder Include="Migrations\DataMigrations\" />
   </ItemGroup>
 
 </Project>

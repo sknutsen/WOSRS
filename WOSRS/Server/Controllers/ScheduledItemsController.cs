@@ -40,7 +40,7 @@ namespace WOSRS.Server.Controllers
             var userId = User.GetUserId();
             var today = DateTime.Today;
 
-            var result = context.ScheduledItems.Where(e => e.Date.Day == today.Day && e.Date.Month == today.Month && e.Date.Year == today.Year).FirstOrDefault();
+            var result = context.ScheduledItems.Where(e => e.UserId == userId && e.Date.Day == today.Day && e.Date.Month == today.Month && e.Date.Year == today.Year).FirstOrDefault();
 
             if (result == null)
             {
