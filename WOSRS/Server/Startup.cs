@@ -1,11 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.KeyVault.Models;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using WOSRS.Server.Data;
 using WOSRS.Server.Models;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -26,12 +32,21 @@ namespace WOSRS.Server
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = Configuration["TestDb"] ?? Configuration["ConnectionStrings:TestDb"];
+            string certName = Configuration["Cert"];
 
             services.AddDbContext<ApplicationDbContext>(options => 
             { 
                 options.UseNpgsql(connectionString, o => o.SetPostgresVersion(new System.Version(9, 6)));
                 options.UseOpenIddict();
             });
+
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            KeyVaultClient client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+
+            SecretBundle certificatePrivateKeySecretBundle = client.GetSecretAsync(Environment.GetEnvironmentVariable("VaultUri"), certName).Result;
+
+            byte[] privateKeyBytes = Convert.FromBase64String(certificatePrivateKeySecretBundle.Value);
+            X509Certificate2 certificateWithPrivateKey = new X509Certificate2(privateKeyBytes, (string)null, X509KeyStorageFlags.MachineKeySet);
 
             services.AddOpenIddict()
                 .AddCore(options =>
@@ -55,8 +70,11 @@ namespace WOSRS.Server
                            .AllowRefreshTokenFlow();
 
                     // Register the signing and encryption credentials.
-                    options.AddDevelopmentEncryptionCertificate()
-                           .AddDevelopmentSigningCertificate();
+                    //options.AddDevelopmentEncryptionCertificate()
+                    //       .AddDevelopmentSigningCertificate();
+
+                    options.AddEncryptionCertificate(certificateWithPrivateKey)
+                           .AddSigningCertificate(certificateWithPrivateKey);
 
                     // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
                     options.UseAspNetCore()
