@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WOSRS.Shared.Models.Interfaces
+namespace WOSRS.Shared.Models.Interfaces;
+
+public interface IEntityClass
 {
-    public interface IEntityClass
-    {
-    }
 }

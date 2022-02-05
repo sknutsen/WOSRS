@@ -3,45 +3,44 @@ using WOSRS.Shared.DataContainers.Interfaces;
 using WOSRS.Shared.Models;
 using WOSRS.Shared.Models.Interfaces;
 
-namespace WOSRS.Shared.DataContainers
+namespace WOSRS.Shared.DataContainers;
+
+public class ItemCategoryContainer : ContainerBase, IContainer
 {
-    public class ItemCategoryContainer : ContainerBase, IContainer
+    public int ItemCategoryId { get; set; }
+    public int ItemId { get; set; }
+    public int CategoryId { get; set; }
+
+    public Item Item { get; set; }
+    public Category Category { get; set; }
+
+    public ItemCategoryContainer() { }
+
+    public ItemCategoryContainer(IEntityClass entity)
     {
-        public int ItemCategoryId { get; set; }
-        public int ItemId { get; set; }
-        public int CategoryId { get; set; }
+        Fill(entity);
+    }
 
-        public Item Item { get; set; }
-        public Category Category { get; set; }
-
-        public ItemCategoryContainer() { }
-
-        public ItemCategoryContainer(IEntityClass entity)
+    public IEntityClass ToEntityClass()
+    {
+        return new ItemCategory
         {
-            Fill(entity);
-        }
+            ItemCategoryId = ItemCategoryId,
+            ItemId = ItemId,
+            CategoryId = CategoryId,
+            Item = Item,
+            Category = Category
+        };
+    }
 
-        public IEntityClass ToEntityClass()
-        {
-            return new ItemCategory
-            {
-                ItemCategoryId = ItemCategoryId,
-                ItemId = ItemId,
-                CategoryId = CategoryId,
-                Item = Item,
-                Category = Category
-            };
-        }
+    public void Fill(IEntityClass entity)
+    {
+        ItemCategory itemCategory = (ItemCategory)entity;
 
-        public void Fill(IEntityClass entity)
-        {
-            ItemCategory itemCategory = (ItemCategory) entity;
-
-            ItemCategoryId = itemCategory.ItemCategoryId;
-            ItemId = itemCategory.ItemId;
-            CategoryId = itemCategory.CategoryId;
-            Item = itemCategory.Item;
-            Category = itemCategory.Category;
-        }
+        ItemCategoryId = itemCategory.ItemCategoryId;
+        ItemId = itemCategory.ItemId;
+        CategoryId = itemCategory.CategoryId;
+        Item = itemCategory.Item;
+        Category = itemCategory.Category;
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace WOSRS.Server.ViewModels.Authorization
+namespace WOSRS.Server.ViewModels.Authorization;
+
+public class LogoutViewModel
 {
-    public class LogoutViewModel
-    {
-        [BindNever]
-        public string RequestId { get; set; }
-    }
+    [BindNever]
+    public string RequestId { get; set; }
 }

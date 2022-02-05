@@ -9,30 +9,29 @@ using WOSRS.Server.Data;
 using WOSRS.Server.Logic;
 using WOSRS.Server.Models;
 
-namespace WOSRS.Server.Controllers
+namespace WOSRS.Server.Controllers;
+
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Route("[controller]")]
+[ApiController]
+public class UsersController : Controller
 {
-    [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
-    [Route("[controller]")]
-    [ApiController]
-    public class UsersController : Controller
+    private DataDbContext context;
+    private readonly ILogger<UsersController> logger;
+    private readonly UserManager<ApplicationUser> userManager;
+
+    public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, DataDbContext context)
     {
-        private DataDbContext context;
-        private readonly ILogger<UsersController> logger;
-        private readonly UserManager<ApplicationUser> userManager;
+        this.logger = logger;
+        this.userManager = userManager;
+        this.context = context;
+    }
 
-        public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, DataDbContext context)
-        {
-            this.logger = logger;
-            this.userManager = userManager;
-            this.context = context;
-        }
+    [HttpGet]
+    public async Task<ActionResult<string>> Get()
+    {
+        var userId = User.GetUserId();
 
-        [HttpGet]
-        public async Task<ActionResult<string>> Get()
-        {
-            var userId = User.GetUserId();
-
-            return Ok(userId);
-        }
+        return Ok(userId);
     }
 }

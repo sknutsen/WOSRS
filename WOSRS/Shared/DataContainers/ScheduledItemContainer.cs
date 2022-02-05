@@ -4,48 +4,47 @@ using WOSRS.Shared.DataContainers.Interfaces;
 using WOSRS.Shared.Models;
 using WOSRS.Shared.Models.Interfaces;
 
-namespace WOSRS.Shared.DataContainers
+namespace WOSRS.Shared.DataContainers;
+
+public class ScheduledItemContainer : ContainerBase, IContainer
 {
-    public class ScheduledItemContainer : ContainerBase, IContainer
+    public int ScheduledItemId { get; set; }
+    public bool IsComplete { get; set; }
+    public DateTime Date { get; set; }
+    public int? ScheduleGroup { get; set; }
+    public int ItemId { get; set; }
+
+    public Item Item { get; set; }
+
+    public ScheduledItemContainer() { }
+
+    public ScheduledItemContainer(IEntityClass entity)
     {
-        public int ScheduledItemId { get; set; }
-        public bool IsComplete { get; set; }
-        public DateTime Date { get; set; }
-        public int? ScheduleGroup { get; set; }
-        public int ItemId { get; set; }
+        Fill(entity);
+    }
 
-        public Item Item { get; set; }
-
-        public ScheduledItemContainer() { }
-
-        public ScheduledItemContainer(IEntityClass entity)
+    public IEntityClass ToEntityClass()
+    {
+        return new ScheduledItem
         {
-            Fill(entity);
-        }
+            ScheduledItemId = ScheduledItemId,
+            IsComplete = IsComplete,
+            Date = Date,
+            ScheduleGroup = ScheduleGroup,
+            ItemId = ItemId,
+            Item = Item
+        };
+    }
 
-        public IEntityClass ToEntityClass()
-        {
-            return new ScheduledItem
-            {
-                ScheduledItemId = ScheduledItemId,
-                IsComplete = IsComplete,
-                Date = Date,
-                ScheduleGroup = ScheduleGroup,
-                ItemId = ItemId,
-                Item = Item
-            };
-        }
+    public void Fill(IEntityClass entity)
+    {
+        ScheduledItem scheduledItem = (ScheduledItem)entity;
 
-        public void Fill(IEntityClass entity)
-        {
-            ScheduledItem scheduledItem = (ScheduledItem) entity;
-
-            ScheduledItemId = scheduledItem.ScheduledItemId;
-            IsComplete = scheduledItem.IsComplete;
-            Date = scheduledItem.Date;
-            ScheduleGroup = scheduledItem.ScheduleGroup;
-            ItemId = scheduledItem.ItemId;
-            Item = scheduledItem.Item;
-        }
+        ScheduledItemId = scheduledItem.ScheduledItemId;
+        IsComplete = scheduledItem.IsComplete;
+        Date = scheduledItem.Date;
+        ScheduleGroup = scheduledItem.ScheduleGroup;
+        ItemId = scheduledItem.ItemId;
+        Item = scheduledItem.Item;
     }
 }

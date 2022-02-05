@@ -8,33 +8,32 @@ using System.Threading.Tasks;
 using WOSRS.Shared.Models.BaseClasses;
 using WOSRS.Shared.Models.Interfaces;
 
-namespace WOSRS.Shared.Models
+namespace WOSRS.Shared.Models;
+
+[Table("scheduled_items")]
+public class ScheduledItem : TimeStamped, IEntityClass
 {
-    [Table("scheduled_items")]
-    public class ScheduledItem : TimeStamped, IEntityClass
-    {
-        [Key]
-        [Column("scheduled_item_id")]
-        public int ScheduledItemId { get; set; }
-        
-        [Column("is_complete")]
-        public bool IsComplete { get; set; }
+    [Key]
+    [Column("scheduled_item_id")]
+    public int ScheduledItemId { get; set; }
 
-        [Column("date", TypeName = "date")]
-        public DateTime Date { get; set; }
+    [Column("is_complete")]
+    public bool IsComplete { get; set; }
 
-        [Column("schedule_group")]
-        public int? ScheduleGroup { get; set; }
+    [Column("date", TypeName = "date")]
+    public DateTime Date { get; set; }
 
-        [Required]
-        [ForeignKey("items")]
-        [Column("item_id")]
-        public int ItemId { get; set; }
-        public Item Item { get; set; }
+    [Column("schedule_group")]
+    public int? ScheduleGroup { get; set; }
 
-        [Required]
-        [ForeignKey("application_users")]
-        [Column("user_id")]
-        public string UserId { get; set; }
-    }
+    [Required]
+    [ForeignKey("items")]
+    [Column("item_id")]
+    public int ItemId { get; set; }
+    public Item Item { get; set; }
+
+    [Required]
+    [ForeignKey("application_users")]
+    [Column("user_id")]
+    public string UserId { get; set; }
 }

@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WOSRS.Shared.Models.Interfaces;
 
-namespace WOSRS.Shared.DataContainers.Interfaces
+namespace WOSRS.Shared.DataContainers.Interfaces;
+
+public interface IContainer
 {
-    public interface IContainer
-    {
-        public IEntityClass ToEntityClass();
-        public void Fill(IEntityClass entity);
-    }
+    public IEntityClass ToEntityClass();
+    public void Fill(IEntityClass entity);
 }

@@ -7,45 +7,45 @@ using System.Threading.Tasks;
 using WOSRS.Server.Data;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace WOSRS.Server
+namespace WOSRS.Server;
+
+public class Worker : IHostedService
 {
-    public class Worker : IHostedService
+    private readonly IServiceProvider _serviceProvider;
+
+    public Worker(IServiceProvider serviceProvider)
+        => _serviceProvider = serviceProvider;
+
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        private readonly IServiceProvider _serviceProvider;
+        await using var scope = _serviceProvider.CreateAsyncScope();
 
-        public Worker(IServiceProvider serviceProvider)
-            => _serviceProvider = serviceProvider;
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await context.Database.EnsureCreatedAsync();
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+
+        if (await manager.FindByClientIdAsync("WOSRS.Client") is null)
         {
-            await using var scope = _serviceProvider.CreateAsyncScope();
-
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            await context.Database.EnsureCreatedAsync();
-
-            var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
-
-            if (await manager.FindByClientIdAsync("WOSRS.Client") is null)
+            await manager.CreateAsync(new OpenIddictApplicationDescriptor
             {
-                await manager.CreateAsync(new OpenIddictApplicationDescriptor
-                {
-                    ClientId = "WOSRS.Client",
-                    ConsentType = ConsentTypes.Explicit,
-                    DisplayName = "WOSRS",
-                    Type = ClientTypes.Public,
-                    PostLogoutRedirectUris =
+                ClientId = "WOSRS.Client",
+                ConsentType = ConsentTypes.Explicit,
+                DisplayName = "WOSRS",
+                Type = ClientTypes.Public,
+                PostLogoutRedirectUris =
                     {
                         new Uri("https://wosrsserver.azurewebsites.net/authentication/logout-callback"),
                         new Uri("https://wosrs.zdk.no/authentication/logout-callback"),
                         new Uri("https://localhost:44371/authentication/logout-callback"),
                     },
-                    RedirectUris =
+                RedirectUris =
                     {
                         new Uri("https://wosrsserver.azurewebsites.net/authentication/login-callback"),
                         new Uri("https://wosrs.zdk.no/authentication/login-callback"),
                         new Uri("https://localhost:44371/authentication/login-callback"),
                     },
-                    Permissions =
+                Permissions =
                     {
                         Permissions.Endpoints.Authorization,
                         Permissions.Endpoints.Logout,
@@ -57,15 +57,14 @@ namespace WOSRS.Server
                         Permissions.Scopes.Profile,
                         Permissions.Scopes.Roles
                     },
-                    Requirements =
+                Requirements =
                     {
                         Requirements.Features.ProofKeyForCodeExchange
                     }
-                });
-            }
-
+            });
         }
 
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

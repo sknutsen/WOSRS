@@ -4,20 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WOSRS.Shared.Logic
+namespace WOSRS.Shared.Logic;
+
+public static class DateFunc
 {
-    public static class DateFunc
+    public static string ToDateText(this DateTime date, bool time = false)
     {
-        public static string ToDateText(this DateTime date, bool time = false)
+        string result = $"{date.DayOfWeek} {date.Day}.{date.Month}.{date.Year}";
+
+        if (time)
         {
-            string result = $"{date.DayOfWeek} {date.Day}.{date.Month}.{date.Year}";
-
-            if (time)
-            {
-                result += $" {date.Hour}.{date.Minute}";
-            }
-
-            return result;
+            result += $" {date.Hour}.{date.Minute}";
         }
+
+        return result;
     }
 }

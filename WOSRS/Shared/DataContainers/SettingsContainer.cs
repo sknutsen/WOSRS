@@ -8,31 +8,30 @@ using WOSRS.Shared.DataContainers.Interfaces;
 using WOSRS.Shared.Models;
 using WOSRS.Shared.Models.Interfaces;
 
-namespace WOSRS.Shared.DataContainers
+namespace WOSRS.Shared.DataContainers;
+
+public class SettingsContainer : ContainerBase, IContainer
 {
-    public class SettingsContainer : ContainerBase, IContainer
+    public int SettingsId { get; set; }
+    public bool PointSystem { get; set; }
+    public int? OrderType { get; set; }
+
+    public IEntityClass ToEntityClass()
     {
-        public int SettingsId { get; set; }
-        public bool PointSystem { get; set; }
-        public int? OrderType { get; set; }
-
-        public IEntityClass ToEntityClass()
+        return new Settings
         {
-            return new Settings
-            {
-                SettingsId = SettingsId,
-                OrderType = OrderType,
-                PointSystem = PointSystem
-            };
-        }
+            SettingsId = SettingsId,
+            OrderType = OrderType,
+            PointSystem = PointSystem
+        };
+    }
 
-        public void Fill(IEntityClass entity)
-        {
-            Settings settings = (Settings)entity;
+    public void Fill(IEntityClass entity)
+    {
+        Settings settings = (Settings)entity;
 
-            SettingsId = settings.SettingsId;
-            PointSystem = settings.PointSystem;
-            OrderType = settings.OrderType;
-        }
+        SettingsId = settings.SettingsId;
+        PointSystem = settings.PointSystem;
+        OrderType = settings.OrderType;
     }
 }

@@ -4,39 +4,38 @@ using WOSRS.Shared.DataContainers.Interfaces;
 using WOSRS.Shared.Models;
 using WOSRS.Shared.Models.Interfaces;
 
-namespace WOSRS.Shared.DataContainers
+namespace WOSRS.Shared.DataContainers;
+
+public class ItemContainer : ContainerBase, IContainer
 {
-    public class ItemContainer : ContainerBase, IContainer
+    public int ItemId { get; set; }
+    public string ItemName { get; set; }
+
+    public ICollection<ItemCategory> ItemCategories { get; set; }
+
+    public ItemContainer() { }
+
+    public ItemContainer(IEntityClass entity)
     {
-        public int ItemId { get; set; }
-        public string ItemName { get; set; }
+        Fill(entity);
+    }
 
-        public ICollection<ItemCategory> ItemCategories { get; set; }
-
-        public ItemContainer() { }
-
-        public ItemContainer(IEntityClass entity)
+    public IEntityClass ToEntityClass()
+    {
+        return new Item
         {
-            Fill(entity);
-        }
+            ItemId = ItemId,
+            ItemName = ItemName,
+            ItemCategories = ItemCategories
+        };
+    }
 
-        public IEntityClass ToEntityClass()
-        {
-            return new Item
-            {
-                ItemId = ItemId,
-                ItemName = ItemName,
-                ItemCategories = ItemCategories
-            };
-        }
+    public void Fill(IEntityClass entity)
+    {
+        Item item = (Item)entity;
 
-        public void Fill(IEntityClass entity)
-        {
-            Item item = (Item) entity;
-
-            ItemId = item.ItemId;
-            ItemName = item.ItemName;
-            ItemCategories = item.ItemCategories;
-        }
+        ItemId = item.ItemId;
+        ItemName = item.ItemName;
+        ItemCategories = item.ItemCategories;
     }
 }

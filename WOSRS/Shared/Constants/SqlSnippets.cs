@@ -1,7 +1,6 @@
-﻿namespace WOSRS.Shared.Constants
+﻿namespace WOSRS.Shared.Constants;
+
+public class SqlSnippets
 {
-    public class SqlSnippets
-    {
-        public const string GenerateSettings = "INSERT INTO settings RETURNING settings_id";
-    }
+    public const string GenerateSettings = "INSERT INTO settings RETURNING settings_id";
 }

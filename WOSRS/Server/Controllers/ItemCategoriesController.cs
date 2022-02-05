@@ -13,79 +13,78 @@ using WOSRS.Shared.Constants;
 using WOSRS.Shared.DataContainers;
 using WOSRS.Shared.Models;
 
-namespace WOSRS.Server.Controllers
+namespace WOSRS.Server.Controllers;
+
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[ApiController]
+[Route("[controller]")]
+public class ItemCategoriesController : Controller
 {
-    [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
-    [ApiController]
-    [Route("[controller]")]
-    public class ItemCategoriesController : Controller
+    private DataDbContext context;
+    private readonly ILogger<ItemCategoriesController> logger;
+    private readonly UserManager<ApplicationUser> userManager;
+
+    public ItemCategoriesController(ILogger<ItemCategoriesController> logger, UserManager<ApplicationUser> userManager, DataDbContext context)
     {
-        private DataDbContext context;
-        private readonly ILogger<ItemCategoriesController> logger;
-        private readonly UserManager<ApplicationUser> userManager;
+        this.logger = logger;
+        this.userManager = userManager;
+        this.context = context;
+    }
 
-        public ItemCategoriesController(ILogger<ItemCategoriesController> logger, UserManager<ApplicationUser> userManager, DataDbContext context)
+    [HttpPost("new")]
+    public async Task<ActionResult<ItemCategoryContainer>> New([FromBody] ItemCategoryContainer container)
+    {
+        logger.LogInformation(LogTexts.CreatingItemCategoryLink);
+
+        var userId = User.GetUserId();
+
+        var item = await context.Items.FindAsync(container.ItemId);
+        var category = await context.Categories.FindAsync(container.CategoryId);
+
+        if (item.UserId != userId || category.UserId != userId)
         {
-            this.logger = logger;
-            this.userManager = userManager;
-            this.context = context;
+            logger.LogWarning(LogTexts.NewItemCategoryLinkFailed);
+
+            return BadRequest();
         }
 
-        [HttpPost("new")]
-        public async Task<ActionResult<ItemCategoryContainer>> New([FromBody] ItemCategoryContainer container)
+        ItemCategory itemCategory = (ItemCategory)container.ToEntityClass();
+
+        itemCategory.CreatedAt = System.DateTime.Now;
+        itemCategory.UpdatedAt = System.DateTime.Now;
+
+        var result = context.ItemCategories.Add(itemCategory);
+        await context.SaveChangesAsync();
+
+        logger.LogInformation(LogTexts.NewItemCategoryLinkSuccess, result.Entity.ItemCategoryId);
+
+        return NoContent();
+    }
+
+    [HttpPost("delete")]
+    public async Task<ActionResult<ItemCategoryContainer>> Delete([FromBody] ItemCategoryContainer container)
+    {
+        logger.LogInformation(LogTexts.DeletingItemCategoryLink);
+
+        var userId = User.GetUserId();
+
+        var result = await context.ItemCategories.FindAsync(container.ItemCategoryId);
+
+        var item = await context.FindAsync<Item>(container.ItemId);
+        var category = await context.FindAsync<Category>(container.ItemId);
+
+        if (item.UserId != userId || category.UserId != userId)
         {
-            logger.LogInformation(LogTexts.CreatingItemCategoryLink);
+            logger.LogWarning(LogTexts.DeleteItemCategoryLinkFailed);
 
-            var userId = User.GetUserId();
-
-            var item = await context.Items.FindAsync(container.ItemId);
-            var category = await context.Categories.FindAsync(container.CategoryId);
-
-            if (item.UserId != userId || category.UserId != userId)
-            {
-                logger.LogWarning(LogTexts.NewItemCategoryLinkFailed);
-
-                return BadRequest();
-            }
-
-            ItemCategory itemCategory = (ItemCategory) container.ToEntityClass();
-
-            itemCategory.CreatedAt = System.DateTime.Now;
-            itemCategory.UpdatedAt = System.DateTime.Now;
-
-            var result = context.ItemCategories.Add(itemCategory);
-            await context.SaveChangesAsync();
-
-            logger.LogInformation(LogTexts.NewItemCategoryLinkSuccess, result.Entity.ItemCategoryId);
-
-            return NoContent();
+            return BadRequest();
         }
 
-        [HttpPost("delete")]
-        public async Task<ActionResult<ItemCategoryContainer>> Delete([FromBody] ItemCategoryContainer container)
-        {
-            logger.LogInformation(LogTexts.DeletingItemCategoryLink);
+        context.ItemCategories.Remove(result);
+        await context.SaveChangesAsync();
 
-            var userId = User.GetUserId();
+        logger.LogInformation(LogTexts.DeleteItemCategoryLinkSuccess, result.ItemCategoryId);
 
-            var result = await context.ItemCategories.FindAsync(container.ItemCategoryId);
-
-            var item = await context.FindAsync<Item>(container.ItemId);
-            var category = await context.FindAsync<Category>(container.ItemId);
-
-            if (item.UserId != userId || category.UserId != userId)
-            {
-                logger.LogWarning(LogTexts.DeleteItemCategoryLinkFailed);
-
-                return BadRequest();
-            }
-
-            context.ItemCategories.Remove(result);
-            await context.SaveChangesAsync();
-
-            logger.LogInformation(LogTexts.DeleteItemCategoryLinkSuccess, result.ItemCategoryId);
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }
