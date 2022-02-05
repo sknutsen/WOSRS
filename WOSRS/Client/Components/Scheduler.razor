@@ -3,20 +3,33 @@
     {
         <div>
             <div>
-                <h5>@GetMonthName(i.Month)</h5>
+                <h4>@i.Year</h4>
             </div>
 
-            @foreach (var j in i.ScheduledItems)
-            {
-                <ScheduledItemComponent ScheduledItem="j" />
-            }
+            <div>
+                @foreach (var j in i.ScheduledItems)
+                {
+                    <div>
+                        <div>
+                            <h5>@GetMonthName(j.Month)</h5>
+                        </div>
+
+                        <div>
+                            @foreach (var k in j.ScheduledItems)
+                            {
+                                <ScheduledItemComponent ScheduledItem="k" />
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     }
 </div>
 
 @code {
     [Parameter]
-    public IEnumerable<MonthlySchedule> ScheduledItems { get; set; }
+    public IEnumerable<YearlySchedule> ScheduledItems { get; set; }
 
     private string GetMonthName(int month)
     {

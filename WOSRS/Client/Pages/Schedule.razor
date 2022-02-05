@@ -18,12 +18,12 @@ else
 
 <hr />
 
-<Scheduler ScheduledItems="@(scheduledItemsByMonth ?? new List<MonthlySchedule>())" />
+<Scheduler ScheduledItems="@(scheduledItemsByYear ?? new List<YearlySchedule>())" />
 
 @code {
     private ScheduledItemContainer currentItem;
     private IEnumerable<ScheduledItemContainer> scheduledItems;
-    private IEnumerable<MonthlySchedule> scheduledItemsByMonth;
+    private IEnumerable<YearlySchedule> scheduledItemsByYear;
     private IEnumerable<ItemContainer> items;
 
     protected override async Task OnInitializedAsync()
@@ -57,9 +57,15 @@ else
     private async Task GetList()
     {
         scheduledItems = await Http.GetFromJsonAsync<IEnumerable<ScheduledItemContainer>>("ScheduledItems/list");
-        scheduledItemsByMonth = scheduledItems.GroupBy(e => e.Date.Month).Select(e => new MonthlySchedule
+        var scheduledItemsByMonth = scheduledItems.GroupBy(e => new { e.Date.Month, e.Date.Year }).Select(e => new MonthlySchedule
         {
-            Month = e.Key,
+            Month = e.Key.Month,
+            Year = e.Key.Year,
+            ScheduledItems = e.ToList(),
+        }).ToList();
+        scheduledItemsByYear = scheduledItemsByMonth.GroupBy(e => e.Year).Select(e => new YearlySchedule
+        {
+            Year = e.Key,
             ScheduledItems = e.ToList(),
         }).ToList();
         items = await Http.GetFromJsonAsync<IEnumerable<ItemContainer>>("Items/list");
