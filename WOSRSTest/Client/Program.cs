@@ -11,7 +11,7 @@ var baseUri = builder.HostEnvironment.BaseAddress;
 
 //builder.Services.AddHttpClient("WOSRS.ServerAPI", client => client.BaseAddress = baseUri)
 builder.Services.AddHttpClient("WOSRS.ServerAPI")
-    .ConfigureHttpClient(client => client.BaseAddress = new Uri(baseUri))
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri(baseUri.Replace("http", "https")))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
 // Supply HttpClient instances that include access tokens when making requests to the server project
