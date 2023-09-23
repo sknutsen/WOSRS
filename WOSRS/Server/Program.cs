@@ -31,5 +31,14 @@ public class Program
                     logging.AddConsole();
                     logging.AddAzureWebAppDiagnostics();
                 });
+
+                string port = Environment.GetEnvironmentVariable("PORT");
+
+                if (!string.IsNullOrEmpty(port))
+                {
+                    webBuilder.UseContentRoot("/app/out");
+                    webBuilder.UseWebRoot("wwwroot");
+                    webBuilder.UseUrls($"http://*:{port}");
+                }
             });
 }
