@@ -142,27 +142,38 @@ else
 
         var response = await Http.PostAsJsonAsync<ItemContainer>("Items/get", selectedItem);
 
-        selectedItem = await response.Content.ReadFromJsonAsync<ItemContainer>();
+        if (response?.Content != null)
+        {
+            selectedItem = await response.Content.ReadFromJsonAsync<ItemContainer>();
 
-        await RefreshItems();
+            await RefreshItems();
+        }
     }
 
     private async Task DeleteItemCategory(CategoryContainer category)
     {
-        ItemCategoryContainer itemCategory = new ItemCategoryContainer
+        var itemCategoryMapping = selectedItem.ItemCategories.FirstOrDefault(e => e.CategoryId == category.CategoryId && e.ItemId == selectedItem.ItemId);
+
+        if (itemCategoryMapping != null)
         {
-            ItemCategoryId = selectedItem.ItemCategories.Where(e => e.CategoryId == category.CategoryId && e.ItemId == selectedItem.ItemId).First().ItemCategoryId,
-            CategoryId = category.CategoryId,
-            ItemId = selectedItem.ItemId
-        };
+            ItemCategoryContainer itemCategory = new ItemCategoryContainer
+            {
+                ItemCategoryId = itemCategoryMapping.ItemCategoryId,
+                CategoryId = category.CategoryId,
+                ItemId = selectedItem.ItemId
+            };
 
-        await Http.PostAsJsonAsync<ItemCategoryContainer>("ItemCategories/delete", itemCategory);
+            await Http.PostAsJsonAsync<ItemCategoryContainer>("ItemCategories/delete", itemCategory);
 
-        var response = await Http.PostAsJsonAsync<ItemContainer>("Items/get", selectedItem);
+            var response = await Http.PostAsJsonAsync<ItemContainer>("Items/get", selectedItem);
 
-        selectedItem = await response.Content.ReadFromJsonAsync<ItemContainer>();
+            if (response?.Content != null)
+            {
+                selectedItem = await response.Content.ReadFromJsonAsync<ItemContainer>();
 
-        await RefreshItems();
+                await RefreshItems();
+            }
+        }
     }
 
 }
