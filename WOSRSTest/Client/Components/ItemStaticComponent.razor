@@ -1,0 +1,12 @@
+﻿@using WOSRSTest.Client.Components.BaseComponents
+
+<StaticContainerComponent Text="@Item.ItemName" @attributes="InputAttributes" />
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>();
+
+    [Parameter]
+    public ItemContainer Item { get; set; }
+
+}

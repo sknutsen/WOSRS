@@ -1,0 +1,12 @@
+﻿.checkbox-label {
+    padding: 10px;
+    border: 1px solid black;
+    min-width: 75px;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+label.checkbox-label > input {
+    display: none;
+}
