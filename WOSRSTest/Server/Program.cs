@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -106,11 +107,6 @@ builder.Services.AddOpenIddict()
 //builder.Services.AddAuthorization();
 
 builder.Services.AddControllersWithViews();
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-});
 builder.Services.AddRazorPages();
 builder.Services.AddResponseCompression(opts =>
 {
@@ -140,20 +136,28 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddHostedService<Worker>();
 
 WebApplication app = builder.Build();
-
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https";
+    return next();
+});
 app.UseResponseCompression();
+var forwardedHeaderOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardedHeaderOptions.KnownProxies.Add(IPAddress.Parse("192.168.1.20")); // reverse proxy IP
+app.UseForwardedHeaders(forwardedHeaderOptions);
 
 // Configure the HTTP request pipeline.
 if (isDev)
 {
     app.UseDeveloperExceptionPage();
     app.UseWebAssemblyDebugging();
-    app.UseForwardedHeaders();
 }
 else
 {
     app.UseExceptionHandler("/Error");
-    app.UseForwardedHeaders();
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
