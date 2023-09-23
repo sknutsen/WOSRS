@@ -148,6 +148,12 @@ var forwardedHeaderOptions = new ForwardedHeadersOptions
 };
 forwardedHeaderOptions.KnownProxies.Add(IPAddress.Parse("192.168.1.20")); // reverse proxy IP
 app.UseForwardedHeaders(forwardedHeaderOptions);
+app.UseCors(cors => cors
+.AllowAnyMethod()
+.AllowAnyHeader()
+.SetIsOriginAllowed(origin => true)
+.AllowCredentials()
+);
 
 // Configure the HTTP request pipeline.
 if (isDev)

@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\WOSRS.Client.csproj" />
     <ProjectReference Include="..\Shared\WOSRS.Shared.csproj" />
   </ItemGroup>
 

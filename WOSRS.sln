@@ -3,17 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WOSRS.Server", "WOSRS\Server\WOSRS.Server.csproj", "{91295004-F0B4-45E8-AFD1-A331A199E8FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WOSRSTest.Server", "WOSRSTest\Server\WOSRSTest.Server.csproj", "{59D1E6C8-83E6-462D-845D-3E683954C10A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WOSRS.Client", "WOSRS\Client\WOSRS.Client.csproj", "{21EA2981-5AEA-4607-9FBC-0935691904BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WOSRSTest.Client", "WOSRSTest\Client\WOSRSTest.Client.csproj", "{14DC5E68-70A9-4A88-8CB7-C9F487E4363B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WOSRS.Shared", "WOSRS\Shared\WOSRS.Shared.csproj", "{71248EF9-43C4-49A9-8B7E-E0DAE276857C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WOSRSTest.Server", "WOSRSTest\Server\WOSRSTest.Server.csproj", "{59D1E6C8-83E6-462D-845D-3E683954C10A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WOSRSTest.Client", "WOSRSTest\Client\WOSRSTest.Client.csproj", "{14DC5E68-70A9-4A88-8CB7-C9F487E4363B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WOSRSTest.Shared", "WOSRSTest\Shared\WOSRSTest.Shared.csproj", "{980BD0EA-21A5-4022-A666-86D1C1C39DCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WOSRSTest.Shared", "WOSRSTest\Shared\WOSRSTest.Shared.csproj", "{980BD0EA-21A5-4022-A666-86D1C1C39DCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{91295004-F0B4-45E8-AFD1-A331A199E8FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91295004-F0B4-45E8-AFD1-A331A199E8FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91295004-F0B4-45E8-AFD1-A331A199E8FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91295004-F0B4-45E8-AFD1-A331A199E8FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21EA2981-5AEA-4607-9FBC-0935691904BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21EA2981-5AEA-4607-9FBC-0935691904BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21EA2981-5AEA-4607-9FBC-0935691904BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21EA2981-5AEA-4607-9FBC-0935691904BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71248EF9-43C4-49A9-8B7E-E0DAE276857C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71248EF9-43C4-49A9-8B7E-E0DAE276857C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71248EF9-43C4-49A9-8B7E-E0DAE276857C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71248EF9-43C4-49A9-8B7E-E0DAE276857C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59D1E6C8-83E6-462D-845D-3E683954C10A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59D1E6C8-83E6-462D-845D-3E683954C10A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59D1E6C8-83E6-462D-845D-3E683954C10A}.Release|Any CPU.ActiveCfg = Release|Any CPU
