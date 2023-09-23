@@ -38,7 +38,7 @@ public class Program
                 {
                     webBuilder.UseContentRoot("/app/out");
                     webBuilder.UseWebRoot("wwwroot");
-                    webBuilder.UseUrls($"http://*:{port}");
+                    webBuilder.UseUrls($"http://*:{port}", $"https://*:{port}");
                 }
             });
 }
