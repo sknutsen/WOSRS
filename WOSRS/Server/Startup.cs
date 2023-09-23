@@ -84,7 +84,7 @@ public class Startup
                        .EnableStatusCodePagesIntegration()
                        .EnableTokenEndpointPassthrough();
 
-                options.UseAspNetCore().DisableTransportSecurityRequirement();
+                //options.UseAspNetCore().DisableTransportSecurityRequirement();
             })
             .AddValidation(options =>
             {
@@ -151,7 +151,7 @@ public class Startup
             app.UseHsts();
         }
 
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
         app.UseBlazorFrameworkFiles();
         app.UseStaticFiles();
 
