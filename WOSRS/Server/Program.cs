@@ -21,11 +21,6 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((context, config) =>
             {
-                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
-                {
-                    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
-                    config.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-                }
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
