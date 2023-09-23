@@ -83,6 +83,8 @@ public class Startup
                        .EnableLogoutEndpointPassthrough()
                        .EnableStatusCodePagesIntegration()
                        .EnableTokenEndpointPassthrough();
+
+                options.UseAspNetCore().DisableTransportSecurityRequirement();
             })
             .AddValidation(options =>
             {
